@@ -15,7 +15,7 @@ docker build --no-cache --rm -t private:workspace .
 ### create container and attach
 
 ```bash
-docker run -it -v ./work:/home/kaave/work --name workspace private:workspace /bin/zsh -l
+docker run -it -v $(pwd)/work:/home/kaave/work --name workspace private:workspace /bin/zsh -l
 ```
 
 ### from next time
