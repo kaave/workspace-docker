@@ -1,0 +1,77 @@
+### https://raw.github.com/github/gitignore/a8a9744a6f51864e184fb2441bac59af66bbc385/Global/osx.gitignore
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+
+### https://raw.github.com/github/gitignore/a8a9744a6f51864e184fb2441bac59af66bbc385/Global/linux.gitignore
+
+*~
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+
+### https://raw.github.com/github/gitignore/a8a9744a6f51864e184fb2441bac59af66bbc385/Global/windows.gitignore
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+
+### Add manual
+
+# database files
+/data/mysql/*
+!/data/mysql/.gitkeep
+/data/postgresql/*
+!/data/postgresql/.gitkeep
+/data/redis/*
+!/data/redis/.gitkeep
+/data/mongodb/*
+!/data/mongodb/.gitkeep
+
+# development folders
+/work/*
+!/work/.gitkeep
+
