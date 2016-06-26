@@ -8,10 +8,11 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y && apt-get upgrade -y
 
 # install some packages
-RUN apt-get install -y apt-utils coreutils build-essential
-RUN apt-get install -y wget unzip curl grep sudo bison libssl-dev openssl zlib1g-dev openssh-server
-RUN apt-get install -y git mercurial gettext libncurses5-dev libperl-dev python-dev python3-dev ruby-dev lua5.2 liblua5.2-dev luajit libluajit-5.1 nginx
-RUN apt-get install -y zsh tree tmux figlet htop direnv vim-gnome
+RUN apt-get install -y apt-utils coreutils build-essential \
+ && apt-get install -y unzip grep sudo bison libssl-dev openssl zlib1g-dev openssh-server \
+ && apt-get install -y net-tools wget curl inetutils-ping inetutils-telnet inotify-tools \
+ && apt-get install -y git mercurial gettext libncurses5-dev libperl-dev python-dev python3-dev ruby-dev lua5.2 liblua5.2-dev luajit libluajit-5.1 libbz2-dev \
+ && apt-get install -y zsh tree tmux figlet htop direnv nginx vim-gnome
 
 # japanese language
 RUN apt-get install -y language-pack-ja-base language-pack-ja ibus-mozc man manpages-ja
@@ -24,15 +25,15 @@ ENV LC_CTYPE ja_JP.UTF-8
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 # append watch files count
-RUN echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf
+RUN echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf && sysctl -p
+# RUN echo 524288 | tee -a /proc/sys/fs/inotify/max_user_watches
 
 # sshd
 RUN sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd
 RUN mkdir /var/run/sshd
 
 # DB
-RUN apt-get -y install sqlite3 libsqlite3-dev
-RUN apt-get -y install postgresql-client redis-tools mongodb-clients
+RUN apt-get -y install sqlite3 libsqlite3-dev postgresql-client redis-tools mongodb-clients
 # CAUTION: choose packages
 # RUN apt-get -y install mysql-client
 RUN apt-get -y install mariadb-client
@@ -47,6 +48,17 @@ RUN chsh -s /usr/bin/zsh kaave # set zsh
 USER kaave
 WORKDIR /home/kaave
 ENV HOME /home/kaave
+
+# ssh
+RUN mkdir .ssh
+RUN chmod 700 .ssh
+ADD id_rsa /home/kaave/.ssh/id_rsa
+ADD id_rsa.pub /home/kaave/.ssh/id_rsa.pub
+USER root
+RUN chown kaave /home/kaave/.ssh/id_rsa
+RUN chown kaave /home/kaave/.ssh/id_rsa.pub
+
+USER kaave
 
 # anyenv
 RUN git clone https://github.com/riywo/anyenv.git ~/.anyenv \
@@ -129,58 +141,30 @@ RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/ndenv/
 
 # go 1.6.2
 # i don't write go
-# RUN /bin/bash -lc 'goenv install 1.6.2' \
-#  && /bin/bash -lc 'goenv global 1.6.2' \
-#  && /bin/bash -lc 'goenv rehash'
+RUN /bin/bash -lc 'goenv install 1.6.2' \
+ && /bin/bash -lc 'goenv global 1.6.2' \
+ && /bin/bash -lc 'goenv rehash'
 
 # PHP 7.0.7
 # i don't write PHP
-# RUN sudo apt-get install -y libxml2-dev re2c imagemagick libcurl4-openssl-dev libjpeg-dev libpng-dev libmcrypt-dev libtidy-dev libxslt-dev autoconf automake
-# RUN /bin/bash -lc 'phpenv install 7.0.7' \
-#  && /bin/bash -lc 'phpenv global 7.0.7' \
-#  && /bin/bash -lc 'phpenv rehash'
+RUN sudo apt-get install -y libxml2-dev re2c imagemagick libcurl4-openssl-dev libjpeg-dev libpng-dev libmcrypt-dev libtidy-dev libxslt-dev autoconf automake
+RUN /bin/bash -lc 'phpenv install 7.0.7' \
+ && /bin/bash -lc 'phpenv global 7.0.7' \
+ && /bin/bash -lc 'phpenv rehash'
 
 # private settings
-RUN git clone https://github.com/kaave/dotfiles.git ~/dotfiles
-RUN ln -sf ~/dotfiles/zshrc ~/.zshrc \
- && ln -sf ~/dotfiles/zshenv ~/.zshenv \
- && ln -sf ~/dotfiles/tmux.conf ~/.tmux.conf \
- && ln -sf ~/dotfiles/tmuxinator ~/.tmuxinator \
- && ln -sf ~/dotfiles/vimrc ~/.vimrc \
- && ln -sf ~/dotfiles/npmrc ~/.npmrc \
- && ln -sf ~/dotfiles/gvimrc ~/.gvimrc \
- && ln -sf ~/dotfiles/eslintrc ~/.eslintrc \
- && ln -sf ~/dotfiles/coffeelint.json ~/coffeelint.json \
- && ln -sf ~/dotfiles/tslint.json ~/tslint.json \
- && ln -sf ~/dotfiles/tern-project ~/.tern-project \
- && ln -sf ~/dotfiles/ctags ~/.ctags \
- && ln -sf ~/dotfiles/rubocop.yml ~/.rubocop.yml \
- && ln -sf ~/dotfiles/gitconfig ~/.gitconfig \
- && ln -sf ~/dotfiles/gitignore ~/.gitignore
-
-RUN git clone https://github.com/ali-inc/lint_configs.git ~/lint_configs
+RUN git clone https://github.com/kaave/dotfiles.git ~/dotfiles \
+ && git clone https://github.com/ali-inc/lint_configs.git ~/lint_configs \
+ && git clone https://github.com/zsh-users/zsh-completions.git ~/zsh-completions
 RUN ln -sf ~/lint_configs/.eslintrc ~/.eslintrc \
  && ln -sf ~/lint_configs/.scss-lint.yml ~/.scss-lint.yml
 
-RUN mkdir -p ~/.vim/bundle/
-RUN git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim \
- && git clone https://github.com/zsh-users/zsh-completions.git ~/zsh-completions
+# dotfiles setup
+RUN /bin/bash ~/dotfiles/_setup.bash
 
 # create sync dir.
-RUN mkdir ~/work \
- && mkdir ~/data
+RUN mkdir ~/work
 
-####################################
-# あとまわし
-####################################
-# # ssh
-# RUN mkdir .ssh
-# RUN chmod 700 .ssh
-# ADD id_rsa ~/.ssh/id_rsa
-# ADD id_rsa.pub ~/.ssh/id_rsa.pub
-# USER root
-# RUN chown kaave /home/kaave/.ssh/id_rsa
-# RUN chown kaave /home/kaave/.ssh/id_rsa.pub
-#
-# USER kaave
-####################################
+USER root
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]
