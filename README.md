@@ -1,10 +1,5 @@
 # My workspace (2016.06)
 
-## Checklist
-
-- [ ] Add database containers
-- [ ] ...and Orchestration
-
 ## How to use
 ### create/download image
 
