@@ -5,18 +5,11 @@
 - [ ] Add database containers
 - [ ] ...and Orchestration
 
-## setup
-
-```bash
-docker build --no-cache --rm -t private:workspace .
-```
-
 ## How to use
 ### create/download image
 
 ```bash
-$ docker-compose build
-$ docker-compose pull
+$ /usr/bin/env bash ./setup.sh
 ```
 
 ### start on Daemon mode

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # copy key file from user directory
-if [ ! -e ~/.ssh/id_rsa || ! -e ~/.ssh/id_rsa ]; then
-    echo "\e[1;31m Error! can't find key file on ~/.ssh/ \e[m";
-    echo "\e[1;31m You must create your key files before workspace setup \e[m";
+if [ ! -e ~/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa.pub ]; then
+    echo "Error! can't find key file on ~/.ssh/";
+    echo "You must create your key files before workspace setup";
     exit 1;
 fi
 
@@ -19,7 +19,6 @@ docker-compose pull
 # remove key files
 rm -rf ./id_rsa
 rm -rf ./id_rsa.pub
-
 
 exit 0;
 
