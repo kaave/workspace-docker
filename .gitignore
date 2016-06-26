@@ -61,6 +61,8 @@ $RECYCLE.BIN/
 
 ### Add manual
 
+id_rsa*
+
 # database files
 /data/mysql/*
 !/data/mysql/.gitkeep
@@ -74,4 +76,3 @@ $RECYCLE.BIN/
 # development folders
 /work/*
 !/work/.gitkeep
-
