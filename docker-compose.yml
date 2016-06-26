@@ -37,7 +37,7 @@ postgres:
   restart: always
   image: kiasaki/alpine-postgres
   volumes:
-    - ./data/postgres:/data
+    - ./data/postgres:/var/lib/postgresql/data
   ports:
     - "5432:5432"
   # environment:
