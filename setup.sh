@@ -7,8 +7,12 @@ if [ ! -e ~/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa.pub ]; then
     exit 1;
 fi
 
+# copy keyfiles
 cp ~/.ssh/id_rsa ./
 cp ~/.ssh/id_rsa.pub ./
+
+# create db directories
+mkdir -p ./data/{mysql,postgres,redis,mongodb}
 
 # build dev
 docker-compose build
@@ -21,4 +25,3 @@ rm -rf ./id_rsa
 rm -rf ./id_rsa.pub
 
 exit 0;
-

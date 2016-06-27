@@ -1,5 +1,12 @@
 # My workspace (2016.06)
 
+## Important
+
+This workspace save dbdatas on `./data/{mysql,postgres,redis,mongodb}`.
+If you remove these files, dbdatas remove too.
+
+`./work` is working directory. this directory mount on dev container's `/home/kaave/work`.
+
 ## How to use
 ### create/download image
 
@@ -16,9 +23,9 @@ $ docker-compose up -d
 ### access to workspace:dev on ssh
 
 ```bash
-$ ssh USERNAME@localhost -p 2222
+$ ssh kaave@localhost -p 2222
 # use sshpass
-$ sshpass -p USERPASS ssh USERNAME@localhost -p 2222
+$ sshpass -p USERPASS ssh kaave@localhost -p 2222
 ```
 
 ## My guide

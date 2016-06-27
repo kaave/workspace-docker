@@ -66,8 +66,8 @@ id_rsa*
 # database files
 /data/mysql/*
 !/data/mysql/.gitkeep
-/data/postgresql/*
-!/data/postgresql/.gitkeep
+/data/postgres/*
+!/data/postgres/.gitkeep
 /data/redis/*
 !/data/redis/.gitkeep
 /data/mongodb/*
