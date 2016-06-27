@@ -1,9 +1,13 @@
 # My workspace (2016.06)
 
+## TODO
+
+- [ ] use data volumes
+
 ## Important
 
 This workspace save dbdatas on `./data/{mysql,postgres,redis,mongodb}`.
-If you remove these files, dbdatas remove too.
+If you remove these files, dbdatas remove too. Be careful💣
 
 `./work` is working directory. this directory mount on dev container's `/home/kaave/work`.
 
@@ -14,7 +18,7 @@ If you remove these files, dbdatas remove too.
 $ /usr/bin/env bash ./setup.sh
 ```
 
-### start on Daemon mode
+### start all containers on Daemon mode
 
 ```bash
 $ docker-compose up -d
@@ -27,6 +31,13 @@ $ ssh kaave@localhost -p 2222
 # use sshpass
 $ sshpass -p USERPASS ssh kaave@localhost -p 2222
 ```
+
+#### access to db some tools
+
+- PostgreSQL: localhost:5432
+- Redis: localhost:6379
+- MongoDB: localhost:27017
+- Memcached: localhost:11211
 
 ## My guide
 

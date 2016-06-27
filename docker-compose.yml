@@ -5,7 +5,9 @@ dev:
   restart: always
   build: .
   ports:
-    - "3000:3000"   # rails
+    - "3000:3000"   # rails, browser-sync
+    - "3001:3001"   # browser-sync
+    - "3443:3443"   # rails (https) nocheck...
     - "4000:4000"   # phoenix
     - "4443:4443"   # phoenix (https)
     - "4567:4567"   # sinatra
