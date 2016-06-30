@@ -60,12 +60,23 @@ RUN chown kaave /home/kaave/.ssh/id_rsa.pub
 
 USER kaave
 
+# private settings
+RUN git clone https://github.com/kaave/dotfiles.git ~/dotfiles \
+ && git clone https://github.com/ali-inc/lint_configs.git ~/lint_configs \
+ && git clone https://github.com/zsh-users/zsh-completions.git ~/zsh-completions
+RUN ln -sf ~/lint_configs/.eslintrc ~/.eslintrc \
+ && ln -sf ~/lint_configs/.scss-lint.yml ~/.scss-lint.yml
+
+# dotfiles setup
+RUN /bin/bash ~/dotfiles/_setup.bash
+
+# create sync dir.
+RUN mkdir ~/work
+
 # anyenv
 RUN git clone https://github.com/riywo/anyenv.git ~/.anyenv \
  && git clone https://github.com/znz/anyenv-update.git ~/.anyenv/plugins/anyenv-update \
  && git clone https://github.com/znz/anyenv-git.git ~/.anyenv/plugins/anyenv-git
-RUN echo 'export PATH="$HOME/.anyenv/bin:$PATH"' >> ~/.profile \
- && echo 'eval "$(anyenv init -)"' >> ~/.profile
 RUN /bin/bash -lc 'anyenv install -s rbenv' \
  && /bin/bash -lc 'anyenv install -s ndenv' \
  && /bin/bash -lc 'anyenv install -s erlenv' \
@@ -77,38 +88,13 @@ RUN /bin/bash -lc 'anyenv install -s rbenv' \
 # ruby 2.3.1
 RUN git clone https://github.com/sstephenson/rbenv-default-gems.git ~/.anyenv/envs/rbenv/plugins/rbenv-default-gems \
  && git clone https://github.com/sstephenson/rbenv-gem-rehash.git ~/.anyenv/envs/rbenv/plugins/rbenv-gem-rehash
-RUN echo pry >> ~/.anyenv/envs/rbenv/default-gems \
- && echo pry-doc >> ~/.anyenv/envs/rbenv/default-gems \
- && echo bundler >> ~/.anyenv/envs/rbenv/default-gems \
- && echo refe2 >> ~/.anyenv/envs/rbenv/default-gems \
- && echo slim >> ~/.anyenv/envs/rbenv/default-gems \
- && echo sass >> ~/.anyenv/envs/rbenv/default-gems \
- && echo rubocop >> ~/.anyenv/envs/rbenv/default-gems \
- && echo rails >> ~/.anyenv/envs/rbenv/default-gems \
- && echo scss_lint >> ~/.anyenv/envs/rbenv/default-gems \
- && echo html2slim >> ~/.anyenv/envs/rbenv/default-gems \
- && echo tmuxinator >> ~/.anyenv/envs/rbenv/default-gems \
- && echo zeus >> ~/.anyenv/envs/rbenv/default-gems
+RUN ln -sf ~/dotfiles/default_libraries/default-gems ~/.anyenv/envs/rbenv/default-gems
 RUN /bin/bash -lc 'rbenv install 2.3.1' \
  && /bin/bash -lc 'rbenv global 2.3.1'
 
 # Node.js v6.2.2
 RUN git clone https://github.com/kaave/ndenv-default-npms.git ~/.anyenv/envs/ndenv/plugins/ndenv-default-npms
-RUN echo npm >> ~/.anyenv/envs/ndenv/default-npms \
- && echo coffee-script >> ~/.anyenv/envs/ndenv/default-npms \
- && echo coffeelint >> ~/.anyenv/envs/ndenv/default-npms \
- && echo typescript >> ~/.anyenv/envs/ndenv/default-npms \
- && echo typings >> ~/.anyenv/envs/ndenv/default-npms \
- && echo tslint >> ~/.anyenv/envs/ndenv/default-npms \
- && echo babel-cli >> ~/.anyenv/envs/ndenv/default-npms \
- && echo babel-eslint >> ~/.anyenv/envs/ndenv/default-npms \
- && echo eslint >> ~/.anyenv/envs/ndenv/default-npms \
- && echo eslint-plugin-babel >> ~/.anyenv/envs/ndenv/default-npms \
- && echo eslint-plugin-import >> ~/.anyenv/envs/ndenv/default-npms \
- && echo eslint-plugin-jsx-a11y >> ~/.anyenv/envs/ndenv/default-npms \
- && echo eslint-plugin-react >> ~/.anyenv/envs/ndenv/default-npms \
- && echo nativefier >> ~/.anyenv/envs/ndenv/default-npms \
- && echo npm-check-updates >> ~/.anyenv/envs/ndenv/default-npms
+RUN ln -sf ~/dotfiles/default_libraries/default-npms ~/.anyenv/envs/ndenv/default-npms
 RUN /bin/bash -lc 'ndenv install v6.2.2' \
  && /bin/bash -lc 'ndenv global v6.2.2' \
  && /bin/bash -lc 'ndenv rehash'
@@ -125,18 +111,18 @@ RUN /bin/bash -lc 'erlenv global otp_src_19.0' \
  && /bin/bash -lc 'erlenv rehash'
 RUN rm -rf /tmp/otp_src_19.0.tar.gz && rm -rf /tmp/otp_src_19.0
 
-# Elixir 1.3.0
-RUN /bin/bash -lc 'exenv install 1.3.0' \
- && /bin/bash -lc 'exenv global 1.3.0' \
+# Elixir 1.3.1
+RUN /bin/bash -lc 'exenv install 1.3.1' \
+ && /bin/bash -lc 'exenv global 1.3.1' \
  && /bin/bash -lc 'exenv rehash' \
  && /bin/bash -lc 'mix local.hex --force' \
  && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
 
-# Python 2.7.11 & 3.5.1
+# Python 2.7.12 & 3.5.2
 RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/ndenv/plugins/pyenv-virtualenv \
- && /bin/bash -lc 'pyenv install 2.7.11' \
- && /bin/bash -lc 'pyenv install 3.5.1' \
- && /bin/bash -lc 'pyenv global 2.7.11' \
+ && /bin/bash -lc 'pyenv install 2.7.12' \
+ && /bin/bash -lc 'pyenv install 3.5.2' \
+ && /bin/bash -lc 'pyenv global 2.7.12' \
  && /bin/bash -lc 'pyenv rehash'
 
 # go 1.6.2
@@ -151,19 +137,6 @@ RUN sudo apt-get install -y libxml2-dev re2c imagemagick libcurl4-openssl-dev li
 RUN /bin/bash -lc 'phpenv install 7.0.7' \
  && /bin/bash -lc 'phpenv global 7.0.7' \
  && /bin/bash -lc 'phpenv rehash'
-
-# private settings
-RUN git clone https://github.com/kaave/dotfiles.git ~/dotfiles \
- && git clone https://github.com/ali-inc/lint_configs.git ~/lint_configs \
- && git clone https://github.com/zsh-users/zsh-completions.git ~/zsh-completions
-RUN ln -sf ~/lint_configs/.eslintrc ~/.eslintrc \
- && ln -sf ~/lint_configs/.scss-lint.yml ~/.scss-lint.yml
-
-# dotfiles setup
-RUN /bin/bash ~/dotfiles/_setup.bash
-
-# create sync dir.
-RUN mkdir ~/work
 
 USER root
 EXPOSE 22
