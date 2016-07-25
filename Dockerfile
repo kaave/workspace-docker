@@ -24,10 +24,6 @@ ENV LC_CTYPE ja_JP.UTF-8
 # localtime
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-# append watch files count
-RUN echo "fs.inotify.max_user_watches=524288" >> /etc/sysctl.conf && sysctl -p
-# RUN echo 524288 | tee -a /proc/sys/fs/inotify/max_user_watches
-
 # sshd
 RUN sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd
 RUN mkdir /var/run/sshd
@@ -40,25 +36,44 @@ RUN apt-get -y install mariadb-client
 
 # create user
 RUN echo 'root:root' | chpasswd # set root's password: root
-RUN useradd -m kaave \
+# create user & change user id & set sudo permit & set passwd
+RUN useradd -m -u 501 kaave \
  && echo "kaave ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
  && echo 'kaave:kaave' | chpasswd # set kaave's password: kaave
 RUN chsh -s /usr/bin/zsh kaave # set zsh
 
+# ssh
+# add kaave key
 USER kaave
 WORKDIR /home/kaave
 ENV HOME /home/kaave
-
-# ssh
 RUN mkdir .ssh
 RUN chmod 700 .ssh
 ADD id_rsa /home/kaave/.ssh/id_rsa
 ADD id_rsa.pub /home/kaave/.ssh/id_rsa.pub
+RUN cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+RUN chmod 600 .ssh/authorized_keys
 USER root
+WORKDIR /root
+ENV HOME /root
 RUN chown kaave /home/kaave/.ssh/id_rsa
 RUN chown kaave /home/kaave/.ssh/id_rsa.pub
+RUN chown kaave /home/kaave/.ssh/authorized_keys
+
+# add root key (same file)
+RUN mkdir .ssh
+RUN chmod 700 .ssh
+ADD id_rsa /root/.ssh/id_rsa
+ADD id_rsa.pub /root/.ssh/id_rsa.pub
+RUN cat .ssh/id_rsa.pub >> .ssh/authorized_keys
+RUN chmod 600 .ssh/authorized_keys
+RUN chown root /root/.ssh/id_rsa
+RUN chown root /root/.ssh/id_rsa.pub
+RUN chown root /root/.ssh/authorized_keys
 
 USER kaave
+WORKDIR /home/kaave
+ENV HOME /home/kaave
 
 # private settings
 RUN git clone https://github.com/kaave/dotfiles.git ~/dotfiles \
@@ -69,6 +84,9 @@ RUN ln -sf ~/lint_configs/.eslintrc ~/.eslintrc \
 
 # dotfiles setup
 RUN /bin/bash ~/dotfiles/_setup.bash
+
+# append watch files count
+RUN echo "sudo echo 524288 | tee -a /proc/sys/fs/inotify/max_user_watches" >> ~/.zshrcextra
 
 # create sync dir.
 RUN mkdir ~/work
