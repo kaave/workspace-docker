@@ -3,7 +3,7 @@
 # copy key file from user directory
 if [ ! -e ~/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa.pub ]; then
     echo "Error! can't find key file on ~/.ssh/";
-    echo "You must create your key files before workspace setup";
+    echo "You must create key files before workspace setup";
     exit 1;
 fi
 
