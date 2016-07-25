@@ -92,11 +92,11 @@ RUN ln -sf ~/dotfiles/default_libraries/default-gems ~/.anyenv/envs/rbenv/defaul
 RUN /bin/bash -lc 'rbenv install 2.3.1' \
  && /bin/bash -lc 'rbenv global 2.3.1'
 
-# Node.js v6.2.2
+# Node.js v6.3.1
 RUN git clone https://github.com/kaave/ndenv-default-npms.git ~/.anyenv/envs/ndenv/plugins/ndenv-default-npms
 RUN ln -sf ~/dotfiles/default_libraries/default-npms ~/.anyenv/envs/ndenv/default-npms
-RUN /bin/bash -lc 'ndenv install v6.2.2' \
- && /bin/bash -lc 'ndenv global v6.2.2' \
+RUN /bin/bash -lc 'ndenv install v6.3.1' \
+ && /bin/bash -lc 'ndenv global v6.3.1' \
  && /bin/bash -lc 'ndenv rehash'
 
 # Erlang 19.0
@@ -111,9 +111,9 @@ RUN /bin/bash -lc 'erlenv global otp_src_19.0' \
  && /bin/bash -lc 'erlenv rehash'
 RUN rm -rf /tmp/otp_src_19.0.tar.gz && rm -rf /tmp/otp_src_19.0
 
-# Elixir 1.3.1
-RUN /bin/bash -lc 'exenv install 1.3.1' \
- && /bin/bash -lc 'exenv global 1.3.1' \
+# Elixir 1.3.2
+RUN /bin/bash -lc 'exenv install 1.3.2' \
+ && /bin/bash -lc 'exenv global 1.3.2' \
  && /bin/bash -lc 'exenv rehash' \
  && /bin/bash -lc 'mix local.hex --force' \
  && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
@@ -125,17 +125,15 @@ RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/ndenv/
  && /bin/bash -lc 'pyenv global 2.7.12' \
  && /bin/bash -lc 'pyenv rehash'
 
-# go 1.6.2
-# i don't write go
-RUN /bin/bash -lc 'goenv install 1.6.2' \
- && /bin/bash -lc 'goenv global 1.6.2' \
+# go 1.6.3
+RUN /bin/bash -lc 'goenv install 1.6.3' \
+ && /bin/bash -lc 'goenv global 1.6.3' \
  && /bin/bash -lc 'goenv rehash'
 
-# PHP 7.0.7
-# i don't write PHP
+# PHP 7.0.9
 RUN sudo apt-get install -y libxml2-dev re2c imagemagick libcurl4-openssl-dev libjpeg-dev libpng-dev libmcrypt-dev libtidy-dev libxslt-dev autoconf automake
-RUN /bin/bash -lc 'phpenv install 7.0.7' \
- && /bin/bash -lc 'phpenv global 7.0.7' \
+RUN /bin/bash -lc 'phpenv install 7.0.9' \
+ && /bin/bash -lc 'phpenv global 7.0.9' \
  && /bin/bash -lc 'phpenv rehash'
 
 USER root
