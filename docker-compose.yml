@@ -5,22 +5,22 @@ dev:
   restart: always
   build: .
   ports:
-    - "3000:3000"   # rails, browser-sync
-    - "3001:3001"   # browser-sync
+    - "3000:3000"   # rails
     - "3443:3443"   # rails (https) nocheck...
-    - "4000:4000"   # phoenix
-    - "4443:4443"   # phoenix (https)
-    - "4567:4567"   # sinatra
+    # - "4000:4000"   # phoenix
+    # - "4443:4443"   # phoenix (https)
+    # - "4567:4567"   # sinatra
     - "2222:22"     # ssh
   links:
     # - mariadb      # i don't use mysql/mariadb
     - postgres
     - redis
-    - mongo
-    - memcached
+    # - mongo
+    # - memcached
   privileged: true    # for sysctl -p
-  volumes:
-    - ./work:/home/kaave/work
+  # sync is heavy. use lsyncd
+  # volumes:
+  #   - ./work:/home/kaave/work
 
 # --------------------------
 # Databases
@@ -55,16 +55,16 @@ redis:
     - "6379:6379"
   command: redis-server --appendonly yes
 
-mongo:
-  restart: always
-  image: mvertes/alpine-mongo
-  ports:
-    - "27017:27017"
-  volumes:
-    - ./data/mongodb:/data/db
+# mongo:
+#   restart: always
+#   image: mvertes/alpine-mongo
+#   ports:
+#     - "27017:27017"
+#   volumes:
+#     - ./data/mongodb:/data/db
 
-memcached:
-  restart: always
-  image: memcached
-  ports:
-    - "11211:11211"
+# memcached:
+#   restart: always
+#   image: memcached
+#   ports:
+#     - "11211:11211"

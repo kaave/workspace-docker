@@ -1,15 +1,15 @@
-# My workspace (2016.06)
-
-## TODO
-
-- [ ] use data volumes
+# My workspace (2016.07)
 
 ## Important
 
-This workspace save dbdatas on `./data/{mysql,postgres,redis,mongodb}`.
+### dbdatas
+
+This workspace saves dbdatas on `./data/{mysql,postgres,redis,mongodb}`.
 If you remove these files, dbdatas remove too. Be careful💣
 
-`./work` is working directory. this directory mount on dev container's `/home/kaave/work`.
+### lsyncd
+
+use lsyncd for work directory sync.
 
 ## How to use
 ### create/download image
@@ -22,6 +22,13 @@ $ /usr/bin/env bash ./setup.sh
 
 ```bash
 $ docker-compose up -d
+```
+
+### and sync work directory start
+
+```bash
+# use other terminal window
+$ sudo lsyncd lsyncd.conf
 ```
 
 ### access to workspace:dev on ssh
@@ -42,3 +49,4 @@ $ sshpass -p USERPASS ssh kaave@localhost -p 2222
 ## My guide
 
 [docker-composeを使って最高の開発環境を手に入れた](http://blog.muuny-blue.info/7d128c1d4a33165a8676d1650d8ff828.html)
+[Dockerを使って開発環境を構築する](https://moneyforward.com/engineers_blog/2015/07/09/docker/)
