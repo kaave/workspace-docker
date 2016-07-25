@@ -46,14 +46,14 @@ postgres:
   # environment:
   #   - POSTGRES_PASSWORD=postgres
 
-redis:
-  restart: always
-  image: redis:alpine
-  volumes:
-    - ./data/redis:/data
-  ports:
-    - "6379:6379"
-  command: redis-server --appendonly yes
+# redis:
+#   restart: always
+#   image: redis:alpine
+#   volumes:
+#     - ./data/redis:/data
+#   ports:
+#     - "6379:6379"
+#   command: redis-server --appendonly yes
 
 # mongo:
 #   restart: always
@@ -68,3 +68,4 @@ redis:
 #   image: memcached
 #   ports:
 #     - "11211:11211"
+

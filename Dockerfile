@@ -77,15 +77,9 @@ RUN mkdir ~/work
 RUN git clone https://github.com/riywo/anyenv.git ~/.anyenv \
  && git clone https://github.com/znz/anyenv-update.git ~/.anyenv/plugins/anyenv-update \
  && git clone https://github.com/znz/anyenv-git.git ~/.anyenv/plugins/anyenv-git
-RUN /bin/bash -lc 'anyenv install -s rbenv' \
- && /bin/bash -lc 'anyenv install -s ndenv' \
- && /bin/bash -lc 'anyenv install -s erlenv' \
- && /bin/bash -lc 'anyenv install -s exenv' \
- && /bin/bash -lc 'anyenv install -s pyenv' \
- && /bin/bash -lc 'anyenv install -s goenv' \
- && /bin/bash -lc 'anyenv install -s phpenv'
 
 # ruby 2.3.1
+RUN /bin/bash -lc 'anyenv install -s rbenv'
 RUN git clone https://github.com/sstephenson/rbenv-default-gems.git ~/.anyenv/envs/rbenv/plugins/rbenv-default-gems \
  && git clone https://github.com/sstephenson/rbenv-gem-rehash.git ~/.anyenv/envs/rbenv/plugins/rbenv-gem-rehash
 RUN ln -sf ~/dotfiles/default_libraries/default-gems ~/.anyenv/envs/rbenv/default-gems
@@ -93,6 +87,7 @@ RUN /bin/bash -lc 'rbenv install 2.3.1' \
  && /bin/bash -lc 'rbenv global 2.3.1'
 
 # Node.js v6.3.1
+RUN /bin/bash -lc 'anyenv install -s ndenv'
 RUN git clone https://github.com/kaave/ndenv-default-npms.git ~/.anyenv/envs/ndenv/plugins/ndenv-default-npms
 RUN ln -sf ~/dotfiles/default_libraries/default-npms ~/.anyenv/envs/ndenv/default-npms
 RUN /bin/bash -lc 'ndenv install v6.3.1' \
@@ -100,6 +95,7 @@ RUN /bin/bash -lc 'ndenv install v6.3.1' \
  && /bin/bash -lc 'ndenv rehash'
 
 # Erlang 19.0
+RUN /bin/bash -lc 'anyenv install -s erlenv'
 RUN curl -L http://www.erlang.org/download/otp_src_19.0.tar.gz -o /tmp/otp_src_19.0.tar.gz
 RUN cd /tmp/ && tar xfvz otp_src_19.0.tar.gz
 RUN cd /tmp/otp_src_19.0 \
@@ -111,7 +107,8 @@ RUN /bin/bash -lc 'erlenv global otp_src_19.0' \
  && /bin/bash -lc 'erlenv rehash'
 RUN rm -rf /tmp/otp_src_19.0.tar.gz && rm -rf /tmp/otp_src_19.0
 
-# Elixir 1.3.2
+# Elixir 1.3.1
+RUN /bin/bash -lc 'anyenv install -s exenv'
 RUN /bin/bash -lc 'exenv install 1.3.2' \
  && /bin/bash -lc 'exenv global 1.3.2' \
  && /bin/bash -lc 'exenv rehash' \
@@ -119,6 +116,7 @@ RUN /bin/bash -lc 'exenv install 1.3.2' \
  && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
 
 # Python 2.7.12 & 3.5.2
+RUN /bin/bash -lc 'anyenv install -s pyenv'
 RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/ndenv/plugins/pyenv-virtualenv \
  && /bin/bash -lc 'pyenv install 2.7.12' \
  && /bin/bash -lc 'pyenv install 3.5.2' \
@@ -126,11 +124,13 @@ RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/ndenv/
  && /bin/bash -lc 'pyenv rehash'
 
 # go 1.6.3
+RUN /bin/bash -lc 'anyenv install -s goenv'
 RUN /bin/bash -lc 'goenv install 1.6.3' \
  && /bin/bash -lc 'goenv global 1.6.3' \
  && /bin/bash -lc 'goenv rehash'
 
 # PHP 7.0.9
+RUN /bin/bash -lc 'anyenv install -s phpenv'
 RUN sudo apt-get install -y libxml2-dev re2c imagemagick libcurl4-openssl-dev libjpeg-dev libpng-dev libmcrypt-dev libtidy-dev libxslt-dev autoconf automake
 RUN /bin/bash -lc 'phpenv install 7.0.9' \
  && /bin/bash -lc 'phpenv global 7.0.9' \
@@ -139,3 +139,4 @@ RUN /bin/bash -lc 'phpenv install 7.0.9' \
 USER root
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
+
