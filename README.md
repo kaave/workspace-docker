@@ -4,8 +4,9 @@
 
 ### dbdatas
 
-This workspace saves dbdatas on `./data/{mysql,postgres,redis,mongodb}`.
-If you remove these files, dbdatas remove too. Be careful💣
+This workspace saves dbdatas on `./data/{mysql,postgres,redis,mongodb}`.  
+If you remove these files, dbdatas remove too.  
+Be careful💣
 
 ### lsyncd
 
@@ -28,7 +29,7 @@ $ docker-compose up -d
 
 ```bash
 # use other terminal window
-$ sudo lsyncd lsyncd.conf
+$ sudo lsyncd lsyncd.conf.lua
 ```
 
 ### access to workspace:dev on ssh
@@ -48,5 +49,5 @@ $ sshpass -p USERPASS ssh kaave@localhost -p 2222
 
 ## My guide
 
-[docker-composeを使って最高の開発環境を手に入れた](http://blog.muuny-blue.info/7d128c1d4a33165a8676d1650d8ff828.html)
-[Dockerを使って開発環境を構築する](https://moneyforward.com/engineers_blog/2015/07/09/docker/)
+- [docker-composeを使って最高の開発環境を手に入れた](http://blog.muuny-blue.info/7d128c1d4a33165a8676d1650d8ff828.html)
+- [Dockerを使って開発環境を構築する](https://moneyforward.com/engineers_blog/2015/07/09/docker/)

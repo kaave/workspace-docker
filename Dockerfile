@@ -86,7 +86,7 @@ RUN ln -sf ~/lint_configs/.eslintrc ~/.eslintrc \
 RUN /bin/bash ~/dotfiles/_setup.bash
 
 # append watch files count
-RUN echo "sudo echo 524288 | tee -a /proc/sys/fs/inotify/max_user_watches" >> ~/.zshrcextra
+RUN echo "echo 524288 | sudo tee -a /proc/sys/fs/inotify/max_user_watches" >> ~/.zshrcextra
 
 # create sync dir.
 RUN mkdir ~/work
@@ -157,4 +157,3 @@ RUN /bin/bash -lc 'phpenv install 7.0.9' \
 USER root
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
-

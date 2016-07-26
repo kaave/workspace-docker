@@ -5,11 +5,15 @@ dev:
   restart: always
   build: .
   ports:
+    - "8080:80"     # http
+    - "8443:443"    # https
     - "3000:3000"   # rails
     - "3443:3443"   # rails (https) nocheck...
-    # - "4000:4000"   # phoenix
-    # - "4443:4443"   # phoenix (https)
-    # - "4567:4567"   # sinatra
+    - "4000:4000"   # phoenix
+    - "4443:4443"   # phoenix (https)
+    - "4567:4567"   # sinatra
+    # - "8080:8080"   # webpack-dev-server
+
     - "2222:22"     # ssh
   links:
     # - mariadb      # i don't use mysql/mariadb
@@ -68,4 +72,3 @@ redis:
 #   image: memcached
 #   ports:
 #     - "11211:11211"
-

@@ -1,3 +1,5 @@
+local homeDir = os.getenv("HOME")
+
 settings {
   logfile = "/tmp/lsyncd.log",
   statusFile = "/tmp/lsyncd-status.log",
@@ -10,13 +12,14 @@ settings {
 sync {
   default.rsync,
   -- your working directory
-  -- source = "/Users/kaave/workspace/work",
-  source = "/Users/abe/Develop/workspace/work",
+  source = homeDir.."/workspace/work",
   target = "localhost:/home/kaave/work",
   delete  = false,
   exclude = {
     ".DS_Store",
     ".git/",
+    -- for sass
+    ".sass-cache/**/*",
     -- for npm
     "node_modules/",
     "typings/",
@@ -40,7 +43,6 @@ sync {
     links    = true,
     update   = true,
     binary   = "/usr/local/bin/rsync",
-    -- rsh = "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 -i /Users/kaave/.ssh/id_rsa",
-    rsh = "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 -i /Users/abe/.ssh/id_rsa",
+    rsh = "/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 -i "..homeDir.."/.ssh/id_rsa",
   }
 }
