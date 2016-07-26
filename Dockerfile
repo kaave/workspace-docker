@@ -12,7 +12,7 @@ RUN apt-get install -y apt-utils coreutils build-essential \
  && apt-get install -y unzip grep sudo bison libssl-dev openssl zlib1g-dev openssh-server \
  && apt-get install -y net-tools wget curl inetutils-ping inetutils-telnet inotify-tools \
  && apt-get install -y git mercurial gettext libncurses5-dev libperl-dev python-dev python3-dev ruby-dev lua5.2 liblua5.2-dev luajit libluajit-5.1 libbz2-dev \
- && apt-get install -y zsh tree tmux figlet htop direnv nginx vim-gnome
+ && apt-get install -y zsh tree tmux figlet htop direnv vim-gnome
 
 # japanese language
 RUN apt-get install -y language-pack-ja-base language-pack-ja ibus-mozc man manpages-ja
