@@ -17,27 +17,28 @@ sync {
   delete  = false,
   exclude = {
     ".DS_Store",
-    ".git/",
+    ".git/**",
+    ".gitkeep",
     -- for sass
-    ".sass-cache/**/*",
+    ".sass-cache/**",
     -- for npm
-    "node_modules/",
-    "typings/",
+    "node_modules/**",
+    "typings/**",
     -- for rails
-    ".bundle/",
-    "log/",
-    "tmp/",
+    ".bundle/**",
+    "log/**",
+    "tmp/**",
     "db/*.sqlite3",
     "db/*.sqlite3-journal",
-    "coverage/",
-    "spec/tmp/",
-    "vendor/bundle/",
+    "coverage/**",
+    "spec/tmp/**",
+    "vendor/bundle/**",
     -- for Phoenix framework
-    "deps/",
-    "_build/",
-    "priv/static/"
+    "deps/**",
+    "_build/**",
+    "priv/static/**"
   },
-  rsync  = {
+  rsync = {
     verbose  = false,
     archive  = true,
     links    = true,
