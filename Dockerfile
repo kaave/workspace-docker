@@ -14,6 +14,11 @@ RUN apt-get install -y apt-utils coreutils build-essential \
  && apt-get install -y git mercurial gettext libncurses5-dev libperl-dev python-dev python3-dev ruby-dev lua5.2 liblua5.2-dev luajit libluajit-5.1 libbz2-dev \
  && apt-get install -y zsh tree tmux figlet htop direnv vim-gnome
 
+# Haskell manager
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 575159689BEFB442 \
+ && echo 'deb http://download.fpcomplete.com/ubuntu xenial main' | tee /etc/apt/sources.list.d/fpco.list
+RUN apt-get update && apt-get install stack -y
+
 # japanese language
 RUN apt-get install -y language-pack-ja-base language-pack-ja ibus-mozc man manpages-ja
 RUN update-locale LANGUAGE=ja_JP.utf-8 LANG=ja_JP.utf-8
@@ -157,3 +162,4 @@ RUN /bin/bash -lc 'phpenv install 7.0.9' \
 USER root
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
+

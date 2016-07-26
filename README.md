@@ -1,5 +1,27 @@
 # My workspace (2016.07)
 
+## Installed
+
+### languages
+
+- Ruby
+- Node.js
+- Python(2&3)
+- Erlang
+- Elixir
+- Golang
+- PHP
+- Haskell
+
+### Databases
+
+- SQLite
+- PostgreSQL
+- MariaDB or MySQL
+- Redis
+- MongoDB
+- Memcached
+
 ## Important
 
 ### dbdatas
