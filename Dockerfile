@@ -4,6 +4,16 @@ MAINTAINER kaave junkjunctions@gmail.com
 # anti error message
 ENV DEBIAN_FRONTEND noninteractive
 
+# define versions
+ENV RUBY_VER 2.3.1
+ENV NODE_VER v6.3.1
+ENV ERLANG_VER 19.0
+ENV ELIXIR_VER 1.3.2
+ENV PYTHON2_VER 2.7.12
+ENV PYTHON3_VER 3.5.2
+ENV GOLANG_VER 1.6.3
+ENV PHP_VER 7.0.9
+
 # system update
 RUN apt-get update -y && apt-get upgrade -y
 
@@ -101,62 +111,62 @@ RUN git clone https://github.com/riywo/anyenv.git ~/.anyenv \
  && git clone https://github.com/znz/anyenv-update.git ~/.anyenv/plugins/anyenv-update \
  && git clone https://github.com/znz/anyenv-git.git ~/.anyenv/plugins/anyenv-git
 
-# ruby 2.3.1
+# ruby
 RUN /bin/bash -lc 'anyenv install -s rbenv'
 RUN git clone https://github.com/sstephenson/rbenv-default-gems.git ~/.anyenv/envs/rbenv/plugins/rbenv-default-gems \
  && git clone https://github.com/sstephenson/rbenv-gem-rehash.git ~/.anyenv/envs/rbenv/plugins/rbenv-gem-rehash
 RUN ln -sf ~/dotfiles/default_libraries/default-gems ~/.anyenv/envs/rbenv/default-gems
-RUN /bin/bash -lc 'rbenv install 2.3.1' \
- && /bin/bash -lc 'rbenv global 2.3.1'
+RUN /bin/bash -lc "rbenv install $RUBY_VER" \
+ && /bin/bash -lc "rbenv global $RUBY_VER"
 
-# Node.js v6.3.1
+# Node.js
 RUN /bin/bash -lc 'anyenv install -s ndenv'
 RUN git clone https://github.com/kaave/ndenv-default-npms.git ~/.anyenv/envs/ndenv/plugins/ndenv-default-npms
 RUN ln -sf ~/dotfiles/default_libraries/default-npms ~/.anyenv/envs/ndenv/default-npms
-RUN /bin/bash -lc 'ndenv install v6.3.1' \
- && /bin/bash -lc 'ndenv global v6.3.1' \
+RUN /bin/bash -lc "ndenv install $NODE_VER" \
+ && /bin/bash -lc "ndenv global $NODE_VER" \
  && /bin/bash -lc 'ndenv rehash'
 
-# Erlang 19.0
+# Erlang
 RUN /bin/bash -lc 'anyenv install -s erlenv'
-RUN curl -L http://www.erlang.org/download/otp_src_19.0.tar.gz -o /tmp/otp_src_19.0.tar.gz
-RUN cd /tmp/ && tar xfvz otp_src_19.0.tar.gz
-RUN cd /tmp/otp_src_19.0 \
+RUN curl -L http://www.erlang.org/download/otp_src_$ERLANG_VER.tar.gz -o /tmp/otp_src_$ERLANG_VER.tar.gz
+RUN cd /tmp/ && tar xfvz otp_src_$ERLANG_VER.tar.gz
+RUN cd /tmp/otp_src_$ERLANG_VER \
  && export ERL_TOP=`pwd` \
- && ./configure --prefix=/home/kaave/.anyenv/envs/erlenv/releases/otp_src_19.0 \
+ && ./configure --prefix=/home/kaave/.anyenv/envs/erlenv/releases/otp_src_$ERLANG_VER \
  && make \
  && make install
-RUN /bin/bash -lc 'erlenv global otp_src_19.0' \
+RUN /bin/bash -lc "erlenv global otp_src_$ERLANG_VER" \
  && /bin/bash -lc 'erlenv rehash'
-RUN rm -rf /tmp/otp_src_19.0.tar.gz && rm -rf /tmp/otp_src_19.0
+RUN rm -rf /tmp/otp_src_$ERLANG_VER.tar.gz && rm -rf /tmp/otp_src_$ERLANG_VER
 
-# Elixir 1.3.1
+# Elixir
 RUN /bin/bash -lc 'anyenv install -s exenv'
-RUN /bin/bash -lc 'exenv install 1.3.2' \
- && /bin/bash -lc 'exenv global 1.3.2' \
+RUN /bin/bash -lc "exenv install $ELIXIR_VER" \
+ && /bin/bash -lc "exenv global $ELIXIR_VER" \
  && /bin/bash -lc 'exenv rehash' \
  && /bin/bash -lc 'mix local.hex --force' \
  && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
 
-# Python 2.7.12 & 3.5.2
+# Python
 RUN /bin/bash -lc 'anyenv install -s pyenv'
 RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/ndenv/plugins/pyenv-virtualenv \
- && /bin/bash -lc 'pyenv install 2.7.12' \
- && /bin/bash -lc 'pyenv install 3.5.2' \
- && /bin/bash -lc 'pyenv global 2.7.12' \
+ && /bin/bash -lc "pyenv install $PYTHON2_VER" \
+ && /bin/bash -lc "pyenv install $PYTHON3_VER" \
+ && /bin/bash -lc "pyenv global $PYTHON2_VER" \
  && /bin/bash -lc 'pyenv rehash'
 
-# go 1.6.3
+# go
 RUN /bin/bash -lc 'anyenv install -s goenv'
-RUN /bin/bash -lc 'goenv install 1.6.3' \
- && /bin/bash -lc 'goenv global 1.6.3' \
+RUN /bin/bash -lc "goenv install $GOLANG_VER" \
+ && /bin/bash -lc "goenv global $GOLANG_VER" \
  && /bin/bash -lc 'goenv rehash'
 
-# PHP 7.0.9
+# PHP
 RUN /bin/bash -lc 'anyenv install -s phpenv'
 RUN sudo apt-get install -y libxml2-dev re2c imagemagick libcurl4-openssl-dev libjpeg-dev libpng-dev libmcrypt-dev libtidy-dev libxslt-dev autoconf automake
-RUN /bin/bash -lc 'phpenv install 7.0.9' \
- && /bin/bash -lc 'phpenv global 7.0.9' \
+RUN /bin/bash -lc "phpenv install $PHP_VER" \
+ && /bin/bash -lc "phpenv global $PHP_VER" \
  && /bin/bash -lc 'phpenv rehash'
 
 USER root
