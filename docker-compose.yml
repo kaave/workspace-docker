@@ -16,10 +16,10 @@ dev:
 
     - "2222:22"     # ssh
   links:
-    # - mariadb      # i don't use mysql/mariadb
+    - mariadb
     - postgres
     - redis
-    # - mongo
+    - mongo
     # - memcached
   privileged: true    # for sysctl -p
   # sync is heavy. use lsyncd
@@ -29,15 +29,15 @@ dev:
 # --------------------------
 # Databases
 # --------------------------
-
-# i don't use mysql/mariadb
-# mariadb:
-#   restart: always
-#   image: mariadb
-#   volumes:
-#     - ./data/mysql:/var/lib/mysql
-#   environment:
-#     - MYSQL_ROOT_PASSWORD=root
+mariadb:
+  restart: always
+  image: mariadb
+  volumes:
+    - ./data/mysql:/var/lib/mysql
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=root
 
 postgres:
   restart: always
@@ -47,8 +47,8 @@ postgres:
     - ./data/postgres:/var/lib/postgresql/data
   ports:
     - "5432:5432"
-  # environment:
-  #   - POSTGRES_PASSWORD=postgres
+  environment:
+    - POSTGRES_PASSWORD=postgres
 
 redis:
   restart: always
@@ -59,13 +59,13 @@ redis:
     - "6379:6379"
   command: redis-server --appendonly yes
 
-# mongo:
-#   restart: always
-#   image: mvertes/alpine-mongo
-#   ports:
-#     - "27017:27017"
-#   volumes:
-#     - ./data/mongodb:/data/db
+mongo:
+  restart: always
+  image: mvertes/alpine-mongo
+  ports:
+    - "27017:27017"
+  volumes:
+    - ./data/mongodb:/data/db
 
 # memcached:
 #   restart: always
