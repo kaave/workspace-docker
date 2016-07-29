@@ -5,8 +5,8 @@ dev:
   restart: always
   build: .
   ports:
-    - "8080:80"     # http
-    - "8443:443"    # https
+    # - "8080:80"     # http
+    # - "8443:443"    # https
     - "3000:3000"   # rails
     - "3443:3443"   # rails (https) nocheck...
     - "4000:4000"   # phoenix
@@ -25,6 +25,20 @@ dev:
   # sync is heavy. use lsyncd
   # volumes:
   #   - ./work:/home/kaave/work
+
+# --------------------------
+# Web server
+# --------------------------
+nginx:
+  restart: always
+  image: nginx:stable-alpine
+  # volumes:
+  #  - ./nginx.conf:/etc/nginx/conf/nginx.conf
+  ports:
+    - "8080:80"     # http
+    - "8443:443"    # https
+  links:
+    - dev
 
 # --------------------------
 # Databases

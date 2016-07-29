@@ -29,12 +29,17 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 575159689B
  && echo 'deb http://download.fpcomplete.com/ubuntu xenial main' | tee /etc/apt/sources.list.d/fpco.list
 RUN apt-get update && apt-get install stack -y
 
-# japanese language
-RUN apt-get install -y language-pack-ja-base language-pack-ja ibus-mozc man manpages-ja
-RUN update-locale LANGUAGE=ja_JP.utf-8 LANG=ja_JP.utf-8
-ENV LANG ja_JP.UTF-8
-ENV LC_ALL ja_JP.UTF-8
-ENV LC_CTYPE ja_JP.UTF-8
+# set UTF-8
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+# RUN apt-get install -y language-pack-ja-base language-pack-ja ibus-mozc man manpages-ja
+# RUN update-locale LANGUAGE=ja_JP.utf-8 LANG=ja_JP.utf-8
+# ENV LANG ja_JP.UTF-8
+# ENV LC_ALL ja_JP.UTF-8
+# ENV LC_CTYPE ja_JP.UTF-8
 
 # localtime
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
