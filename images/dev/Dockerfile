@@ -133,40 +133,40 @@ RUN /bin/bash -lc "ndenv install $NODE_VER" \
  && /bin/bash -lc "ndenv global $NODE_VER" \
  && /bin/bash -lc 'ndenv rehash'
 
-# # Erlang
-# RUN /bin/bash -lc 'anyenv install -s erlenv'
-# RUN curl -L http://www.erlang.org/download/otp_src_$ERLANG_VER.tar.gz -o /tmp/otp_src_$ERLANG_VER.tar.gz
-# RUN cd /tmp/ && tar xfvz otp_src_$ERLANG_VER.tar.gz
-# RUN cd /tmp/otp_src_$ERLANG_VER \
-#  && export ERL_TOP=`pwd` \
-#  && ./configure --prefix=/home/$USER_NAME/.anyenv/envs/erlenv/releases/otp_src_$ERLANG_VER \
-#  && make \
-#  && make install
-# RUN /bin/bash -lc "erlenv global otp_src_$ERLANG_VER" \
-#  && /bin/bash -lc 'erlenv rehash'
-# RUN rm -rf /tmp/otp_src_$ERLANG_VER.tar.gz && rm -rf /tmp/otp_src_$ERLANG_VER
-#
-# # Elixir
-# RUN /bin/bash -lc 'anyenv install -s exenv'
-# RUN /bin/bash -lc "exenv install $ELIXIR_VER" \
-#  && /bin/bash -lc "exenv global $ELIXIR_VER" \
-#  && /bin/bash -lc 'exenv rehash' \
-#  && /bin/bash -lc 'mix local.hex --force' \
-#  && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
-#
-# # Python
-# RUN /bin/bash -lc 'anyenv install -s pyenv'
-# RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/pyenv/plugins/pyenv-virtualenv \
-#  && /bin/bash -lc "pyenv install $PYTHON2_VER" \
-#  && /bin/bash -lc "pyenv install $PYTHON3_VER" \
-#  && /bin/bash -lc "pyenv global $PYTHON2_VER" \
-#  && /bin/bash -lc 'pyenv rehash'
-#
-# # go
-# RUN /bin/bash -lc 'anyenv install -s goenv'
-# RUN /bin/bash -lc "goenv install $GOLANG_VER" \
-#  && /bin/bash -lc "goenv global $GOLANG_VER" \
-#  && /bin/bash -lc 'goenv rehash'
+# Erlang
+RUN /bin/bash -lc 'anyenv install -s erlenv'
+RUN curl -L http://www.erlang.org/download/otp_src_$ERLANG_VER.tar.gz -o /tmp/otp_src_$ERLANG_VER.tar.gz
+RUN cd /tmp/ && tar xfvz otp_src_$ERLANG_VER.tar.gz
+RUN cd /tmp/otp_src_$ERLANG_VER \
+ && export ERL_TOP=`pwd` \
+ && ./configure --prefix=/home/$USER_NAME/.anyenv/envs/erlenv/releases/otp_src_$ERLANG_VER \
+ && make \
+ && make install
+RUN /bin/bash -lc "erlenv global otp_src_$ERLANG_VER" \
+ && /bin/bash -lc 'erlenv rehash'
+RUN rm -rf /tmp/otp_src_$ERLANG_VER.tar.gz && rm -rf /tmp/otp_src_$ERLANG_VER
+
+# Elixir
+RUN /bin/bash -lc 'anyenv install -s exenv'
+RUN /bin/bash -lc "exenv install $ELIXIR_VER" \
+ && /bin/bash -lc "exenv global $ELIXIR_VER" \
+ && /bin/bash -lc 'exenv rehash' \
+ && /bin/bash -lc 'mix local.hex --force' \
+ && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
+
+# Python
+RUN /bin/bash -lc 'anyenv install -s pyenv'
+RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/pyenv/plugins/pyenv-virtualenv \
+ && /bin/bash -lc "pyenv install $PYTHON2_VER" \
+ && /bin/bash -lc "pyenv install $PYTHON3_VER" \
+ && /bin/bash -lc "pyenv global $PYTHON2_VER" \
+ && /bin/bash -lc 'pyenv rehash'
+
+# go
+RUN /bin/bash -lc 'anyenv install -s goenv'
+RUN /bin/bash -lc "goenv install $GOLANG_VER" \
+ && /bin/bash -lc "goenv global $GOLANG_VER" \
+ && /bin/bash -lc 'goenv rehash'
 
 # PHP
 RUN /bin/bash -lc 'anyenv install -s phpenv'

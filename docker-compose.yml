@@ -33,7 +33,6 @@ services:
       - postgres
       - redis
       - mongo
-      # - memcached
     privileged: true    # for sysctl -p
 
   # # --------------------------
@@ -88,8 +87,3 @@ services:
     volumes:
       - ./data/mongodb:/data/db
 
-  # memcached:
-  #   restart: always
-  #   image: memcached
-  #   ports:
-  #     - "11211:11211"
