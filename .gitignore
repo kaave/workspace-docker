@@ -68,4 +68,4 @@ id_rsa*
 
 # development folders
 /work/*
-!/work/.gitkeep
+!/work/www

@@ -35,9 +35,6 @@ services:
       - mongo
       # - memcached
     privileged: true    # for sysctl -p
-    # sync is heavy. use lsyncd
-    # volumes:
-    #   - ./work:/home/kaave/work
 
   # # --------------------------
   # # Web server (can't work it)
