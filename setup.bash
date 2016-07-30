@@ -8,8 +8,8 @@ if [ ! -e ~/.ssh/id_rsa ] || [ ! -e ~/.ssh/id_rsa.pub ]; then
 fi
 
 # copy keyfiles
-cp ~/.ssh/id_rsa ./
-cp ~/.ssh/id_rsa.pub ./
+cp ~/.ssh/id_rsa ./images/dev/
+cp ~/.ssh/id_rsa.pub ./images/dev/
 
 # create db directories
 mkdir -p ./data/{mysql,postgres,redis,mongodb}
@@ -21,7 +21,7 @@ docker-compose build
 docker-compose pull
 
 # remove key files
-rm -rf ./id_rsa
-rm -rf ./id_rsa.pub
+rm -rf ./images/dev/id_rsa
+rm -rf ./images/dev/id_rsa.pub
 
 exit 0;

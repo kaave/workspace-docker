@@ -1,85 +1,98 @@
-# --------------------------
-# Workspace
-# --------------------------
-dev:
-  restart: always
-  build: .
-  ports:
-    - "3000:3000"   # rails, express
-    - "3443:3443"   # rails (https)
-    - "4000:4000"   # phoenix
-    - "4443:4443"   # phoenix (https)
-    - "4567:4567"   # sinatra
-    - "9000:9000"   # PHP-FPM
+version: '2'
+services:
+  # --------------------------
+  # Workspace
+  # --------------------------
+  dev:
+    restart: always
+    build: ./images/dev
+    # environment:
+    #   - USER_NAME=kaave
+    #   - RUBY_VER=2.3.1
+    #   - NODE_VER=v6.3.1
+    #   - ERLANG_VER=19.0
+    #   - ELIXIR_VER=1.3.2
+    #   - PYTHON2_VER=2.7.12
+    #   - PYTHON3_VER=3.5.2
+    #   - GOLANG_VER=1.6.3
+    #   - PHP_VER=7.0.9
+    ports:
+      - "8080:80"     # http
+      - "8443:443"    # https
+      - "3000:3000"   # rails, express
+      - "3443:3443"   # rails (https)
+      - "4000:4000"   # phoenix
+      - "4443:4443"   # phoenix (https)
+      - "4567:4567"   # sinatra
+      - "9000:9000"   # PHP-FPM
 
-    - "2222:22"     # ssh
-  links:
-    - mariadb
-    - postgres
-    - redis
-    - mongo
-    # - memcached
-  privileged: true    # for sysctl -p
-  # sync is heavy. use lsyncd
-  # volumes:
-  #   - ./work:/home/kaave/work
+      - "2222:22"     # ssh
+    links:
+      # - nginx
+      - mariadb
+      - postgres
+      - redis
+      - mongo
+      # - memcached
+    privileged: true    # for sysctl -p
+    # sync is heavy. use lsyncd
+    # volumes:
+    #   - ./work:/home/kaave/work
 
-# --------------------------
-# Web server
-# --------------------------
-nginx:
-  restart: always
-  image: nginx:stable-alpine
-  # volumes:
-  #  - ./nginx.conf:/etc/nginx/conf/nginx.conf
-  ports:
-    - "8080:80"     # http
-    - "8443:443"    # https
-  links:
-    - dev
+  # # --------------------------
+  # # Web server (can't work it)
+  # # --------------------------
+  # nginx:
+  #   restart: always
+  #   build: ./images/nginx
+  #   ports:
+  #     - "8080:80"     # http
+  #     - "8443:443"    # https
+  #   volumes:
+  #    - ./doc_root:/usr/html
 
-# --------------------------
-# Databases
-# --------------------------
-mariadb:
-  restart: always
-  image: mariadb
-  volumes:
-    - ./data/mysql:/var/lib/mysql
-  ports:
-    - "3306:3306"
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
+  # --------------------------
+  # Databases
+  # --------------------------
+  mariadb:
+    restart: always
+    image: mariadb
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
 
-postgres:
-  restart: always
-  image: kiasaki/alpine-postgres
-  volumes:
-    - ./data/postgres:/var/lib/postgresql/data
-  ports:
-    - "5432:5432"
-  environment:
-    - POSTGRES_PASSWORD=postgres
+  postgres:
+    restart: always
+    image: kiasaki/alpine-postgres
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
 
-redis:
-  restart: always
-  image: redis:alpine
-  volumes:
-    - ./data/redis:/data
-  ports:
-    - "6379:6379"
-  command: redis-server --appendonly yes
+  redis:
+    restart: always
+    image: redis:alpine
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
 
-mongo:
-  restart: always
-  image: mvertes/alpine-mongo
-  ports:
-    - "27017:27017"
-  volumes:
-    - ./data/mongodb:/data/db
+  mongo:
+    restart: always
+    image: mvertes/alpine-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongodb:/data/db
 
-# memcached:
-#   restart: always
-#   image: memcached
-#   ports:
-#     - "11211:11211"
+  # memcached:
+  #   restart: always
+  #   image: memcached
+  #   ports:
+  #     - "11211:11211"

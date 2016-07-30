@@ -4,7 +4,8 @@ MAINTAINER kaave junkjunctions@gmail.com
 # anti error message
 ENV DEBIAN_FRONTEND noninteractive
 
-# define versions
+# define
+ENV USER_NAME kaave
 ENV RUBY_VER 2.3.1
 ENV NODE_VER v6.3.1
 ENV ERLANG_VER 19.0
@@ -57,28 +58,28 @@ RUN apt-get -y install mariadb-client
 # create user
 RUN echo 'root:root' | chpasswd # set root's password: root
 # create user & change user id & set sudo permit & set passwd
-RUN useradd -m -u 501 kaave \
- && echo "kaave ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
- && echo 'kaave:kaave' | chpasswd # set kaave's password: kaave
-RUN chsh -s /usr/bin/zsh kaave # set zsh
+RUN useradd -m -u 501 $USER_NAME \
+ && echo "$USER_NAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
+ && echo "$USER_NAME:$USER_NAME" | chpasswd # set user password
+RUN chsh -s /usr/bin/zsh $USER_NAME # set zsh
 
 # ssh
-# add kaave key
-USER kaave
-WORKDIR /home/kaave
-ENV HOME /home/kaave
+# add user key
+USER $USER_NAME
+WORKDIR /home/$USER_NAME
+ENV HOME /home/$USER_NAME
 RUN mkdir .ssh
 RUN chmod 700 .ssh
-ADD id_rsa /home/kaave/.ssh/id_rsa
-ADD id_rsa.pub /home/kaave/.ssh/id_rsa.pub
+ADD id_rsa /home/$USER_NAME/.ssh/id_rsa
+ADD id_rsa.pub /home/$USER_NAME/.ssh/id_rsa.pub
 RUN cat .ssh/id_rsa.pub >> .ssh/authorized_keys
 RUN chmod 600 .ssh/authorized_keys
 USER root
 WORKDIR /root
 ENV HOME /root
-RUN chown kaave /home/kaave/.ssh/id_rsa
-RUN chown kaave /home/kaave/.ssh/id_rsa.pub
-RUN chown kaave /home/kaave/.ssh/authorized_keys
+RUN chown $USER_NAME /home/$USER_NAME/.ssh/id_rsa
+RUN chown $USER_NAME /home/$USER_NAME/.ssh/id_rsa.pub
+RUN chown $USER_NAME /home/$USER_NAME/.ssh/authorized_keys
 
 # add root key (same file)
 RUN mkdir .ssh
@@ -91,12 +92,12 @@ RUN chown root /root/.ssh/id_rsa
 RUN chown root /root/.ssh/id_rsa.pub
 RUN chown root /root/.ssh/authorized_keys
 
-USER kaave
-WORKDIR /home/kaave
-ENV HOME /home/kaave
+USER $USER_NAME
+WORKDIR /home/$USER_NAME
+ENV HOME /home/$USER_NAME
 
 # private settings
-RUN git clone https://github.com/kaave/dotfiles.git ~/dotfiles \
+RUN git clone https://github.com/$USER_NAME/dotfiles.git ~/dotfiles \
  && git clone https://github.com/ali-inc/lint_configs.git ~/lint_configs \
  && git clone https://github.com/zsh-users/zsh-completions.git ~/zsh-completions
 RUN ln -sf ~/lint_configs/.eslintrc ~/.eslintrc \
@@ -126,46 +127,46 @@ RUN /bin/bash -lc "rbenv install $RUBY_VER" \
 
 # Node.js
 RUN /bin/bash -lc 'anyenv install -s ndenv'
-RUN git clone https://github.com/kaave/ndenv-default-npms.git ~/.anyenv/envs/ndenv/plugins/ndenv-default-npms
+RUN git clone https://github.com/$USER_NAME/ndenv-default-npms.git ~/.anyenv/envs/ndenv/plugins/ndenv-default-npms
 RUN ln -sf ~/dotfiles/default_libraries/default-npms ~/.anyenv/envs/ndenv/default-npms
 RUN /bin/bash -lc "ndenv install $NODE_VER" \
  && /bin/bash -lc "ndenv global $NODE_VER" \
  && /bin/bash -lc 'ndenv rehash'
 
-# Erlang
-RUN /bin/bash -lc 'anyenv install -s erlenv'
-RUN curl -L http://www.erlang.org/download/otp_src_$ERLANG_VER.tar.gz -o /tmp/otp_src_$ERLANG_VER.tar.gz
-RUN cd /tmp/ && tar xfvz otp_src_$ERLANG_VER.tar.gz
-RUN cd /tmp/otp_src_$ERLANG_VER \
- && export ERL_TOP=`pwd` \
- && ./configure --prefix=/home/kaave/.anyenv/envs/erlenv/releases/otp_src_$ERLANG_VER \
- && make \
- && make install
-RUN /bin/bash -lc "erlenv global otp_src_$ERLANG_VER" \
- && /bin/bash -lc 'erlenv rehash'
-RUN rm -rf /tmp/otp_src_$ERLANG_VER.tar.gz && rm -rf /tmp/otp_src_$ERLANG_VER
-
-# Elixir
-RUN /bin/bash -lc 'anyenv install -s exenv'
-RUN /bin/bash -lc "exenv install $ELIXIR_VER" \
- && /bin/bash -lc "exenv global $ELIXIR_VER" \
- && /bin/bash -lc 'exenv rehash' \
- && /bin/bash -lc 'mix local.hex --force' \
- && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
-
-# Python
-RUN /bin/bash -lc 'anyenv install -s pyenv'
-RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/ndenv/plugins/pyenv-virtualenv \
- && /bin/bash -lc "pyenv install $PYTHON2_VER" \
- && /bin/bash -lc "pyenv install $PYTHON3_VER" \
- && /bin/bash -lc "pyenv global $PYTHON2_VER" \
- && /bin/bash -lc 'pyenv rehash'
-
-# go
-RUN /bin/bash -lc 'anyenv install -s goenv'
-RUN /bin/bash -lc "goenv install $GOLANG_VER" \
- && /bin/bash -lc "goenv global $GOLANG_VER" \
- && /bin/bash -lc 'goenv rehash'
+# # Erlang
+# RUN /bin/bash -lc 'anyenv install -s erlenv'
+# RUN curl -L http://www.erlang.org/download/otp_src_$ERLANG_VER.tar.gz -o /tmp/otp_src_$ERLANG_VER.tar.gz
+# RUN cd /tmp/ && tar xfvz otp_src_$ERLANG_VER.tar.gz
+# RUN cd /tmp/otp_src_$ERLANG_VER \
+#  && export ERL_TOP=`pwd` \
+#  && ./configure --prefix=/home/$USER_NAME/.anyenv/envs/erlenv/releases/otp_src_$ERLANG_VER \
+#  && make \
+#  && make install
+# RUN /bin/bash -lc "erlenv global otp_src_$ERLANG_VER" \
+#  && /bin/bash -lc 'erlenv rehash'
+# RUN rm -rf /tmp/otp_src_$ERLANG_VER.tar.gz && rm -rf /tmp/otp_src_$ERLANG_VER
+#
+# # Elixir
+# RUN /bin/bash -lc 'anyenv install -s exenv'
+# RUN /bin/bash -lc "exenv install $ELIXIR_VER" \
+#  && /bin/bash -lc "exenv global $ELIXIR_VER" \
+#  && /bin/bash -lc 'exenv rehash' \
+#  && /bin/bash -lc 'mix local.hex --force' \
+#  && /bin/bash -lc 'mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez --force'
+#
+# # Python
+# RUN /bin/bash -lc 'anyenv install -s pyenv'
+# RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/pyenv/plugins/pyenv-virtualenv \
+#  && /bin/bash -lc "pyenv install $PYTHON2_VER" \
+#  && /bin/bash -lc "pyenv install $PYTHON3_VER" \
+#  && /bin/bash -lc "pyenv global $PYTHON2_VER" \
+#  && /bin/bash -lc 'pyenv rehash'
+#
+# # go
+# RUN /bin/bash -lc 'anyenv install -s goenv'
+# RUN /bin/bash -lc "goenv install $GOLANG_VER" \
+#  && /bin/bash -lc "goenv global $GOLANG_VER" \
+#  && /bin/bash -lc 'goenv rehash'
 
 # PHP
 RUN /bin/bash -lc 'anyenv install -s phpenv'
@@ -173,6 +174,19 @@ RUN sudo apt-get install -y libxml2-dev re2c imagemagick libcurl4-openssl-dev li
 RUN /bin/bash -lc "phpenv install $PHP_VER" \
  && /bin/bash -lc "phpenv global $PHP_VER" \
  && /bin/bash -lc 'phpenv rehash'
+
+# PHP-FPM setting & start
+RUN mv $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.conf.default $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.conf \
+ && sed -i "s@;events.mechanism = epoll@events.mechanism = epoll\npid = $HOME/php-fpm.pid@g" $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.conf \
+ && mv $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.d/www.conf.default $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.d/www.conf \
+ && sed -i "s/^listen = 127.0.0.1:9000/listen = 9000/g" $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.d/www.conf \
+ && sed -i "s/^user = nobody/user = $USER_NAME/g" $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.d/www.conf \
+ && sed -i "s/^group = nobody/group = $USER_NAME/g" $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.d/www.conf \
+ && /bin/bash -lc 'php-fpm'
+
+# nginx (TODO: it's bad pattern, use other container!)
+RUN sudo apt-get install -y nginx
+COPY ./default.conf /etc/nginx/conf.d/
 
 USER root
 EXPOSE 22
