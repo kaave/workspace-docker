@@ -5,11 +5,12 @@ dev:
   restart: always
   build: .
   ports:
-    - "3000:3000"   # rails
+    - "3000:3000"   # rails, express
     - "3443:3443"   # rails (https)
     - "4000:4000"   # phoenix
     - "4443:4443"   # phoenix (https)
     - "4567:4567"   # sinatra
+    - "9000:9000"   # PHP-FPM
 
     - "2222:22"     # ssh
   links:
