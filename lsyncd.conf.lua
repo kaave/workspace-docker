@@ -33,6 +33,8 @@ sync {
     "coverage/**",
     "spec/tmp/**",
     "vendor/bundle/**",
+    -- for php(remove if you create ruby apps)
+    "vendor/**",
     -- for Phoenix framework
     "deps/**",
     "_build/**",
