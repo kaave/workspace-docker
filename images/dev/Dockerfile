@@ -183,6 +183,8 @@ RUN mv $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.conf.default $HOM
  && sed -i "s/^user = nobody/user = $USER_NAME/g" $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.d/www.conf \
  && sed -i "s/^group = nobody/group = $USER_NAME/g" $HOME/.anyenv/envs/phpenv/versions/$PHP_VER/etc/php-fpm.d/www.conf \
  && /bin/bash -lc 'php-fpm'
+RUN /bin/bash -lc 'composer global require "squizlabs/php_codesniffer=*"' \
+ && /bin/bash -lc 'composer global require "phpmd/phpmd=*"'
 
 # nginx (TODO: it's bad pattern, use other container!)
 RUN sudo apt-get install -y nginx
