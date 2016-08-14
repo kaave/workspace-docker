@@ -15,9 +15,39 @@ ENV PYTHON3_VER 3.5.2
 ENV GOLANG_VER 1.6.3
 ENV PHP_VER 7.0.9
 
-# system update
-RUN apt-get update -y && apt-get upgrade -y
+# -------------------------------------
+# set Japanese locale
+# -------------------------------------
+# change localtime to Japan
+RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
+    echo 'Asia/Tokyo' > /etc/timezone && date
 
+# change locale to Japanese
+RUN echo 'LC_ALL=ja_JP.UTF-8' > /etc/default/locale && \
+    echo 'LANG=ja_JP.UTF-8' >> /etc/default/locale && \
+    locale-gen ja_JP.UTF-8
+
+# change repos to Japanese
+RUN sed -e 's;http://archive;http://jp.archive;' -e  's;http://us\.archive;http://jp.archive;' -i /etc/apt/sources.list
+RUN [ ! -x /usr/bin/wget ] && apt-get update -y && apt-get install -y wget && touch /.get-wget
+RUN apt-get install -y wget
+RUN wget -q https://www.ubuntulinux.jp/ubuntu-ja-archive-keyring.gpg -O- | apt-key add - && \
+    wget -q https://www.ubuntulinux.jp/ubuntu-jp-ppa-keyring.gpg -O- | apt-key add - && \
+    wget https://www.ubuntulinux.jp/sources.list.d/utopic.list -O- | sed -e 's;utopic;vivid;g' >  /etc/apt/sources.list.d/ubuntu-ja.list
+
+# update system
+RUN apt-get update -y && apt-get upgrade -y && apt-get dist-upgrade -y
+
+# cleaning
+RUN [ -f /.get-wget ] && apt-get purge --auto-remove -y wget && rm -f /.get-wget && apt-get clean
+
+# change default locale
+ENV LC_ALL ja_JP.UTF-8
+ENV LANG j_JP.UTF-8
+
+# -------------------------------------
+# install core libraries
+# -------------------------------------
 # install some packages
 RUN apt-get install -y apt-utils coreutils build-essential \
  && apt-get install -y unzip grep sudo bison libssl-dev openssl zlib1g-dev openssh-server \
@@ -29,18 +59,6 @@ RUN apt-get install -y apt-utils coreutils build-essential \
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 575159689BEFB442 \
  && echo 'deb http://download.fpcomplete.com/ubuntu xenial main' | tee /etc/apt/sources.list.d/fpco.list
 RUN apt-get update && apt-get install stack -y
-
-# set UTF-8
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-
-# RUN apt-get install -y language-pack-ja-base language-pack-ja ibus-mozc man manpages-ja
-# RUN update-locale LANGUAGE=ja_JP.utf-8 LANG=ja_JP.utf-8
-# ENV LANG ja_JP.UTF-8
-# ENV LC_ALL ja_JP.UTF-8
-# ENV LC_CTYPE ja_JP.UTF-8
 
 # localtime
 RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
@@ -55,6 +73,9 @@ RUN apt-get -y install sqlite3 libsqlite3-dev postgresql-client redis-tools mong
 # RUN apt-get -y install mysql-client
 RUN apt-get -y install mariadb-client
 
+# -------------------------------------
+# local settings
+# -------------------------------------
 # create user
 RUN echo 'root:root' | chpasswd # set root's password: root
 # create user & change user id & set sudo permit & set passwd
@@ -97,14 +118,10 @@ WORKDIR /home/$USER_NAME
 ENV HOME /home/$USER_NAME
 
 # private settings
-RUN git clone https://github.com/$USER_NAME/dotfiles.git ~/dotfiles \
- && git clone https://github.com/ali-inc/lint_configs.git ~/lint_configs \
- && git clone https://github.com/zsh-users/zsh-completions.git ~/zsh-completions
-RUN ln -sf ~/lint_configs/.eslintrc ~/.eslintrc \
- && ln -sf ~/lint_configs/.scss-lint.yml ~/.scss-lint.yml
+RUN git clone https://github.com/$USER_NAME/dotfiles.git ~/dotfiles
 
 # dotfiles setup
-RUN /bin/bash ~/dotfiles/_setup.bash
+RUN /usr/bin/zsh -c '~/dotfiles/_setup.zsh'
 
 # append watch files count
 RUN echo "echo 524288 | sudo tee -a /proc/sys/fs/inotify/max_user_watches" >> ~/.zshrcextra
@@ -112,6 +129,9 @@ RUN echo "echo 524288 | sudo tee -a /proc/sys/fs/inotify/max_user_watches" >> ~/
 # create sync dir.
 RUN mkdir ~/work
 
+# -------------------------------------
+# setup language supports
+# -------------------------------------
 # anyenv
 RUN git clone https://github.com/riywo/anyenv.git ~/.anyenv \
  && git clone https://github.com/znz/anyenv-update.git ~/.anyenv/plugins/anyenv-update \
