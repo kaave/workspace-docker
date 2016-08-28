@@ -60,9 +60,6 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 575159689B
  && echo 'deb http://download.fpcomplete.com/ubuntu xenial main' | tee /etc/apt/sources.list.d/fpco.list
 RUN apt-get update && apt-get install stack -y
 
-# localtime
-RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
-
 # sshd
 RUN sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd
 RUN mkdir /var/run/sshd

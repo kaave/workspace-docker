@@ -26,6 +26,7 @@ services:
       - "4567:4567"   # sinatra
       - "9000:9000"   # PHP-FPM
       - "35729:35729" # live-reload
+      - "49190:49190" # PHP Xdebug
 
       - "2222:22"     # ssh
     links:
@@ -34,7 +35,7 @@ services:
       - postgres
       - redis
       - mongo
-    privileged: true    # for sysctl -p
+    privileged: true  # for sysctl -p
 
   # # --------------------------
   # # Web server (can't work it)
