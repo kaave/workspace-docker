@@ -7,12 +7,12 @@ ENV DEBIAN_FRONTEND noninteractive
 # define
 ENV USER_NAME kaave
 ENV RUBY_VER 2.3.1
-ENV NODE_VER v6.3.1
+ENV NODE_VER v6.5.0
 ENV ERLANG_VER 19.0
 ENV ELIXIR_VER 1.3.2
 ENV PYTHON2_VER 2.7.12
 ENV PYTHON3_VER 3.5.2
-ENV GOLANG_VER 1.6.3
+ENV GOLANG_VER 1.7
 ENV PHP_VER 7.0.9
 
 # -------------------------------------
@@ -53,7 +53,7 @@ RUN apt-get install -y apt-utils coreutils build-essential \
  && apt-get install -y unzip grep sudo bison libssl-dev openssl zlib1g-dev openssh-server \
  && apt-get install -y net-tools wget curl inetutils-ping inetutils-telnet inotify-tools \
  && apt-get install -y git mercurial gettext libncurses5-dev libperl-dev python-dev python3-dev ruby-dev lua5.2 liblua5.2-dev luajit libluajit-5.1 libbz2-dev \
- && apt-get install -y zsh tree tmux figlet htop direnv vim-gnome
+ && apt-get install -y zsh tree tmux figlet htop vim-gnome
 
 # Haskell manager
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 575159689BEFB442 \
@@ -180,10 +180,11 @@ RUN git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.anyenv/envs/pyenv/
  && /bin/bash -lc 'pyenv rehash'
 
 # go
-RUN /bin/bash -lc 'anyenv install -s goenv'
-RUN /bin/bash -lc "goenv install $GOLANG_VER" \
- && /bin/bash -lc "goenv global $GOLANG_VER" \
- && /bin/bash -lc 'goenv rehash'
+# TODO: goenv error
+# RUN /bin/bash -lc 'anyenv install -s goenv'
+# RUN /bin/bash -lc "goenv install $GOLANG_VER" \
+#  && /bin/bash -lc "goenv global $GOLANG_VER" \
+#  && /bin/bash -lc 'goenv rehash'
 
 # PHP
 RUN /bin/bash -lc 'anyenv install -s phpenv'
